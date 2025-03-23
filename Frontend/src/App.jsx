@@ -4,11 +4,12 @@ import Books from "./components/Books";
 import Add from "./components/Add";
 import Update from "./components/Update";
 import "./style.css";
-
+import Nav from "./components/Nav";
 function App() {
   return (
     <>
       <BrowserRouter>
+        <Nav />
         <div>
           <Routes>
             <Route path="/" element={<Books />} />

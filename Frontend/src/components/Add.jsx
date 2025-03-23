@@ -11,6 +11,7 @@ const Add = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false); // 👈 Track form submission
 
   //create a navigate object to navigate to different routes
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const Add = () => {
   //handle click function to post the data to the backend
   const handleClick = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // 👈 Start loading
     if (validate()) {
       // Set a default cover if the cover field is empty
       if (!book.cover) {
@@ -43,6 +45,8 @@ const Add = () => {
         navigate("/");
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsSubmitting(false); // 👈 Stop loading
       }
     }
   };
@@ -82,12 +86,22 @@ const Add = () => {
         />
         {errors.price && <p className="error">{errors.price}</p>}
       </div>
-      <button className="formbutton" onClick={handleClick}>
-        Add
-      </button>
-      <button className="formbutton" onClick={() => navigate(-1)}>
-        Back
-      </button>
+      <div className="inputbutton">
+        <button
+          className="formbutton formbutton-primary"
+          onClick={handleClick}
+          disabled={isSubmitting}
+        >
+          {/* // 👈 Disable during submission Add */}
+          {isSubmitting ? <div className="spinner"></div> : "Add Book"}
+        </button>
+        <button
+          className="formbutton formbutton-secondary"
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </button>
+      </div>
     </div>
   );
 };

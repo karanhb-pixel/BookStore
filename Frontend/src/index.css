@@ -11,6 +11,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --primary: #2d3436; /* Dark gray for headers */
+  --secondary: #0984e3; /* Blue for buttons/links */
+  --accent: #e17055; /* Coral for highlights */
+  --background: #f5f6fa; /* Light gray for backgrounds */
 }
 
 a {

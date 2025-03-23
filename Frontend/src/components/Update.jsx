@@ -86,12 +86,17 @@ const Update = () => {
         />
         {errors.price && <p className="error">{errors.price}</p>}
       </div>
-      <button className="formbutton" onClick={handleClick}>
-        Update
-      </button>
-      <button className="formbutton" onClick={() => navigate(-1)}>
-        Back
-      </button>
+      <div className="inputbutton">
+        <button className="formbutton formbutton-primary" onClick={handleClick}>
+          Update
+        </button>
+        <button
+          className="formbutton formbutton-secondary"
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </button>
+      </div>
     </div>
   );
 };
