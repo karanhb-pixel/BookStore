@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "../style.css";
-import "./Books.css";
 import { Triangle } from "react-loader-spinner";
 
 const Books = () => {
@@ -27,7 +26,7 @@ const Books = () => {
   useEffect(() => {
     const fetchAllBooks = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/books");
+        const response = await axios.get("http://localhost:8800/books");
 
         if (Array.isArray(response.data)) {
           setBooks(response.data);
@@ -47,7 +46,7 @@ const Books = () => {
   return (
     <div className="main">
       <div className="head">
-        <h1>Book Shop</h1>
+        <h1>Book Store</h1>
         <div className="addButton">
           <Link className=" formbutton formbutton-primary" to="/add">
             Add Book
@@ -66,7 +65,7 @@ const Books = () => {
               {book.cover && <img src={book.cover} alt="" />}
               <div className="data">
                 <h2>{book.title}</h2>
-                <p>{book.desc}</p>
+                <p>{book.description}</p>
                 <span>{book.price}</span>
               </div>
               <Link

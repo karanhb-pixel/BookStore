@@ -1,22 +1,33 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Update = () => {
   const [book, setBook] = useState({
     title: "",
-    desc: "",
+    description: "",
     cover: "",
     price: null,
   });
 
   const [errors, setErrors] = useState({});
-
-  //create a navigate object to navigate to different routes
   const navigate = useNavigate();
+  const location = useLocation();
 
   //find id from url to update the book
   const bookId = location.pathname.split("/")[2];
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8800/books/${bookId}`);
+        setBook(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchBook();
+  }, [bookId]);
 
   //handle change function to update and add new the book state
   const handleChange = (e) => {
@@ -27,7 +38,7 @@ const Update = () => {
   const validate = () => {
     let tempErrors = {};
     if (!book.title) tempErrors.title = "Title is required";
-    if (!book.desc) tempErrors.desc = "Description is required";
+    if (!book.description) tempErrors.description = "Description is required";
     if (!book.price) tempErrors.price = "Price is required";
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
@@ -42,7 +53,7 @@ const Update = () => {
         book.cover = "abc";
       }
       try {
-        await axios.put("http://localhost:8800/books/" + bookId, book);
+        await axios.put(`http://localhost:8800/books/${bookId}`, book);
         navigate("/");
       } catch (error) {
         console.error(error);
@@ -60,28 +71,32 @@ const Update = () => {
           placeholder="Enter Book Title"
           onChange={handleChange}
           name="title"
+          value={book.title || ""}
           required
         />
         {errors.title && <p className="error">{errors.title}</p>}
         <input
           type="text"
-          placeholder="Enter Book Descriptions"
+          placeholder="Enter Book Description"
           onChange={handleChange}
-          name="desc"
+          name="description"
+          value={book.description || ""}
           required
         />
-        {errors.desc && <p className="error">{errors.desc}</p>}
+        {errors.description && <p className="error">{errors.description}</p>}
         <input
           type="text"
           placeholder="Enter Book Cover"
           onChange={handleChange}
           name="cover"
+          value={book.cover || ""}
         />
         <input
           type="number"
           placeholder="Enter Book Price"
           onChange={handleChange}
           name="price"
+          value={book.price || ""}
           required
         />
         {errors.price && <p className="error">{errors.price}</p>}
