@@ -29,6 +29,7 @@ const Book = sequelize.define(
   {
     timestamps: true,
     tableName: "books",
+    schema: "bookstore",
   }
 );
 

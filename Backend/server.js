@@ -11,17 +11,29 @@ app.use(express.json());
 // Check and sync database
 const initializeDatabase = async () => {
   try {
-    // Check if the table exists
-    const [results] = await sequelize.query('SHOW TABLES LIKE "books"');
-    const tableExists = results.length > 0;
+    // Create bookstore schema if it doesn't exist
+    await sequelize.query("CREATE SCHEMA IF NOT EXISTS bookstore;");
+
+    // Check if the table exists in bookstore schema
+    const [results] = await sequelize.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_schema = 'bookstore' 
+        AND table_name = 'books'
+      );
+    `);
+    const tableExists = results[0].exists;
+
+    // Set search path to bookstore schema
+    await sequelize.query("SET search_path TO bookstore;");
 
     // Sync the database with { force: false } to avoid dropping existing tables
     await sequelize.sync({ force: false });
 
     if (tableExists) {
-      console.log('Table "books" already exists');
+      console.log('Table "books" already exists in bookstore schema');
     } else {
-      console.log('Table "books" has been created');
+      console.log('Table "books" has been created in bookstore schema');
     }
   } catch (err) {
     console.error("Error initializing database:", err);
